@@ -1,0 +1,21 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.RDataTmp
+
+# User-specific files
+.Ruserdata
+
+# RStudio files
+.Rproj.user/
+
+# figure and table content: reproducible from source
+figures/
+tables/
+
+# scratch repo: for draft content not to be committed
+scratch/
+
