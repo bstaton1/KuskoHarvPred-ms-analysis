@@ -1,0 +1,181 @@
+---
+title: ""
+output: 
+  github_document:
+    pandoc_args: ["--wrap=preserve"]
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+> This repository stores the code and data used to perform the analysis presented in the manuscript *In-season predictions of daily harvest for lower Kuskokwim River subsistence salmon fisheries* by authors B. Staton, W. Bechtol, L. Coggins, and G. Decossas.
+
+> The manuscript is under review.
+
+[![ArticleDOI](https://img.shields.io/badge/Article-PLACEHOLDER%20IF%20ACCEPTED-blue?logo=doi&logoColor=f5f5f5)]()  
+[![GitHub Repo Archive DOI](https://img.shields.io/badge/GitHub%20Repo%20Archive-PLACEHOLDER%20WHEN%20MINTED-blue?logo=github)]()
+
+## Repository Structure
+
+```{r subdir-table}
+# define scripts and their purpose
+tab = matrix(c(
+  "`session-setup.R`",          "Loads packages, sets directories, creates miscellaneous objects used throughout other scripts.",
+  "`make-figures.R`",           "Creates all figures in the main text",
+  "`make-tables.R`",            "Creates `.csv` files containing the summarized information ready for table formatting and inclusion in main text and Supplement A.",
+  "`make-residual-figures.R`",  "Creates all residual diagnostic figures in Supplement B."
+
+), ncol = 2, byrow = TRUE)
+
+kableExtra::kbl(tab, "markdown", col.names = c("Subdirectory", "Description"))
+
+```
+
+## Dependencies
+
+### 'KuskoHarv*' Package Family
+
+Users will need to install the R package ['KuskoHarvPred'](https://github.com/bstaton1/KuskoHarvPred).
+From any R console:
+
+```{r, eval = FALSE, echo = TRUE}
+install.packages("remotes")
+remotes::install_github("bstaton1/KuskoHarvPred")
+```
+
+'KuskoHarvPred' contains infrastructure to perform the key analytical tasks presented in the manuscript:
+
+* Regression analyses (e.g., `?fit_all_subsets()`)
+* Model-averaging (e.g., `?predict_model_avg()`)
+* Leave-one-out analyses (`?loo_pred()`, `?loo_pred_model_avg()`, `?whole_loo_analysis()`)
+* Run the [interactive web application](https://bstaton.shinyapps.io/KuskoHarvPred-tool/) (`?run_predictive_tool()`)
+
+The analyses take some time to run, so to streamline analyses, 'KuskoHarvPred' ships with several pre-compiled output objects, which are called repeatedly throughout the scripts in this repo:
+
+* `KuskoHarvPred:::fit_data`: contains the data set used in regression modeling
+* `KuskoHarvPred:::fit_lists`: contains all fitted regression models
+* `KuskoHarvPred:::loo_output`: contains leave-one-out predictions and error summaries
+
+Three other packages (and their dependencies) will simultaneously be installed:
+
+* ['KuskoHarvEst'](https://github.com/bstaton1/KuskoHarvEst) (`r paste0("v", packageVersion("KuskoHarvEst"))`): contains the workflow to produce harvest estimates from interview and flight data.
+* ['KuskoHarvData'](https://github.com/bstaton1/KuskoHarvData) (`r paste0("v", packageVersion("KuskoHarvData"))`): contains raw interview and aerial survey data, as well as compiled harvest and effort estimates, for each drift gillnet opener monitored by the lower Kuskokwim River in-season subsistence salmon harvest monitoring program.
+* ['KuskoHarvUtils'](https://github.com/bstaton1/KuskoHarvUtils) (`r paste0("v", packageVersion("KuskoHarvUtils"))`): contains several helper functions used throughout the 'KuskoHarv\*' family of packages.
+
+To ensure installation of the exact package versions used upon publication, install these packages as follows:
+
+```{r, eval = FALSE, echo = TRUE}
+# FIXME: finalize these REFS
+remotes::install_github("bstaton1/KuskoHarvUtils", ref = "INSERT_FINAL_REF")
+remotes::install_github("bstaton1/KuskoHarvEst", ref = "INSERT_FINAL_REF")
+remotes::install_github("bstaton1/KuskoHarvData", ref = "INSERT_FINAL_REF")
+remotes::install_github("bstaton1/KuskoHarvPred", ref = "INSERT_FINAL_REF")
+```
+
+### CRAN Packages
+
+The table below shows all R packages (and their versions at time of publication; _typically_ should not matter, included for completeness) that are specifically called (typically with `pkg::fn()`) or loaded (using `library(pkg)`).
+Users will need to have these packages installed prior to executing any of the code in this repo.
+
+<details>
+<summary><b>Click to Expand/Hide Packages Table</b></summary>
+
+```{r pkg-table}
+
+# detect all packages called specifically
+used_pkgs = renv::dependencies(quiet = TRUE)$Package |> 
+  unique() |> 
+  sort()
+
+# exclude any packages you don't wish to include in the table here
+# e.g., anything used solely in building this Rmd
+used_pkgs = used_pkgs[!used_pkgs %in% c("renv", "sessioninfo")]
+
+# get the version of each package
+versions = sapply(used_pkgs, function(pkg) paste(packageVersion(pkg), collapse = "."))
+
+# get the description (i.e., title field of DESCRIPTION file) of each package
+desc = sapply(used_pkgs, function(pkg) paste(packageDescription(pkg)$Title, collapse = ".")) |> 
+  stringr::str_replace("\\n", " ")
+
+# build a matrix
+tab = cbind(pkg = used_pkgs, version = versions, desc = desc)
+rownames(tab) = NULL
+
+# build package name as a markdown link, with a URL placeholder
+tab[,"pkg"] = paste0("[`", tab[,"pkg"], "`](URL)")
+
+# function to get the URL that will replace the placeholder
+# if it is a KuskoHarv* package, must link to my GitHub
+# otherwise, use standardized CRAN link
+get_url = function(pkg) {
+  
+  # determine if this package is one the the family
+  is_kusko = stringr::str_detect(pkg, "KuskoHarv")
+  
+  # use my GitHub if so, CRAN if not
+  if (is_kusko) {
+    url = paste0("https://www.github.com/bstaton1/", pkg)
+  } else {
+    url = paste0("https://CRAN.R-project.org/package=", pkg)
+  }
+  
+  # return the output
+  return(url)
+}
+
+# get the URLs for each package and perform the replacement
+tab[,"pkg"] = stringr::str_replace(tab[,"pkg"], "URL", sapply(used_pkgs, get_url))
+
+# return the kable
+kableExtra::kbl(tab, "markdown", col.names = c("Package", "Version", "Description"), align = "lrl")
+```
+
+
+</details>
+
+Running the code below will display the packages not already installed on your machine:
+
+```{r, eval = TRUE, echo = FALSE}
+check_code = paste0("```R\npkgs <- c(", knitr::combine_words(used_pkgs, before = '"', and = "", sep = ', '), ")\npkgs[!pkgs %in% pkgs]\n```")
+
+# pkgs = c(
+#   "DHARMa", "KuskoHarvPred", "KuskoHarvUtils", "lubridate", 
+#   "MuMIn", "qgam", "reshape2", "scales", "stringr", "this.path")
+# pkgs[!pkgs %in% pkgs]
+```
+
+`r check_code`
+
+## Reproducing Article Content
+
+To reproduce all content presented in the manuscript, open [RStudio](https://posit.co/download/rstudio-desktop/) to the `KuskoHarvPred-ms-analysis.Rproj` location and execute:
+
+``` r
+fig_type = "pdf"                   # figure file extension; pdf or png
+source("make-figures.R")           # exports figure files for manuscript
+source("make-tables.R")            # exports .csv files for manuscript
+source("make-residual-figures.R")  # exports residual diagnostic plots
+```
+
+After executing this code, the there will be two new subdirectories: `figures` and `tables` storing the content used in building the manuscript.
+
+## Session Info
+
+<details>
+<summary><b>Click to Expand/Hide Session Info</b></summary>
+
+```{r message = FALSE, warning = FALSE}
+junk = suppressPackageStartupMessages({
+  sapply(used_pkgs, library, character.only = TRUE)
+})
+```
+
+```{r}
+sessioninfo::session_info()
+```
+
+</details>
