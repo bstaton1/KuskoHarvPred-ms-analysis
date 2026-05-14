@@ -24,7 +24,7 @@ From any R console, run:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("bstaton1/KuskoHarvPred", ref = "v2023.3")
+remotes::install_github("bstaton1/KuskoHarvPred", ref = "v2023.4")
 ```
 
 ‘KuskoHarvPred’ contains infrastructure to perform the key analytical tasks presented in the manuscript:
