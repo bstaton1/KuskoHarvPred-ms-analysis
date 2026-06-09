@@ -19,9 +19,9 @@ pt_cex = 1.75
 parse_expression = function(x) {
   out = switch(x,
                "Day^2" = expression(Day^2),
-               "BTF % Chinook^2" = expression(BTF~"%"~Chinook^2),
-               "BTF % Chum^2" = expression(BTF~"%"~Chum^2),
-               "BTF % Sockeye^2" = expression(BTF~"%"~Sockeye^2),
+               "Sonar % Chinook^2" = expression(Sonar~"%"~Chinook^2),
+               "Sonar % Chum^2" = expression(Sonar~"%"~Chum^2),
+               "Sonar % Sockeye^2" = expression(Sonar~"%"~Sockeye^2),
                x
   )
   
@@ -239,29 +239,29 @@ dev.on(base = "relationships", ext = fig_type, dir = figure_dir, width = 3.5, he
 par(mfrow = c(5,1), mar = c(1,4,0.5,0.5), oma = c(1.5,0,0,0), mgp = c(2.5,0.2,0), cex.lab = 1.2, tcl = -0.1, lend = "square", ljoin = "mitre", bg = plot_bg_col, col.axis = plot_text_col, col.lab = plot_text_col)
 
 # panel (a): trips/day
-relationship_plot2("effort", line_col = avg_col, line_lab_day = 25, line_lab = "12h", line_lab_angle = 340)
-relationship_plot2("effort", add = TRUE, settings = list(hours_open = 6), line_col = lwrq_col, line_lab_day = 20, line_lab = "6h", line_lab_angle = 350)
-relationship_plot2("effort", add = TRUE, settings = list(hours_open = 18), line_col = uprq_col, line_lab_day = 30, line_lab = "18h", line_lab_angle = 340)
+relationship_plot2("effort", line_col = avg_col, settings = list(CAT_total_sonar_count = "q50"), line_lab_day = 25, line_lab = "q50", line_lab_angle = 340)
+relationship_plot2("effort", add = TRUE, settings = list(hours_open = 6, CAT_chinook_sonar_comp = "q10", CAT_total_sonar_count = "q50"), line_col = lwrq_col, line_lab_day = 20, line_lab = "q10", line_lab_angle = 350)
+relationship_plot2("effort", add = TRUE, settings = list(hours_open = 18, CAT_chinook_sonar_comp = "q90", CAT_total_sonar_count = "q50"), line_col = uprq_col, line_lab_day = 30, line_lab = "q90", line_lab_angle = 340)
 
 # panel (b): catch/trip
-relationship_plot2("total_cpt", line_col = avg_col, line_lab_day = 30, line_lab = "p50", line_lab_angle = 10)
-relationship_plot2("total_cpt", add = TRUE, settings = list(CAT_total_btf_cpue = "q10"), line_col = lwrq_col, line_lab_day = 35, line_lab = "p10", line_lab_angle = 340)
-relationship_plot2("total_cpt", add = TRUE, settings = list(CAT_total_btf_cpue = "q90"), line_col = uprq_col, line_lab_day = 26, line_lab = "p90", line_lab_angle = 30)
+relationship_plot2("total_cpt", line_col = avg_col, settings = list(CAT_total_sonar_count = "q50"), line_lab_day = 30, line_lab = "p50", line_lab_angle = 40)
+relationship_plot2("total_cpt", add = TRUE, settings = list(CAT_total_sonar_count = "q10"), line_col = lwrq_col, line_lab_day = 35, line_lab = "p10", line_lab_angle = 300)
+relationship_plot2("total_cpt", add = TRUE, settings = list(CAT_total_sonar_count = "q90"), line_col = uprq_col, line_lab_day = 26, line_lab = "p90", line_lab_angle = 60)
 
 # panel (c): % chinook
 relationship_plot2("chinook_comp", line_col = avg_col, line_lab_day = 19, line_lab = "p50", line_lab_angle = 320)
-relationship_plot2("chinook_comp", add = TRUE, settings = list(CAT_chinook_btf_comp = "q10"), line_col = lwrq_col, line_lab_day = 16, line_lab = "p10", line_lab_angle = 335)
-relationship_plot2("chinook_comp", add = TRUE, settings = list(CAT_chinook_btf_comp = "q90"), line_col = uprq_col, line_lab_day = 26, line_lab = "p90", line_lab_angle = 320)
+relationship_plot2("chinook_comp", add = TRUE, settings = list(CAT_chinook_sonar_comp = "q10"), line_col = lwrq_col, line_lab_day = 16, line_lab = "p10", line_lab_angle = 335)
+relationship_plot2("chinook_comp", add = TRUE, settings = list(CAT_chinook_sonar_comp = "q90"), line_col = uprq_col, line_lab_day = 26, line_lab = "p90", line_lab_angle = 320)
 
 # panel (d): % chum
 relationship_plot2("chum_comp", line_col = avg_col, line_lab_day = 26, line_lab = "p50", line_lab_angle = 15)
-relationship_plot2("chum_comp", add = TRUE, settings = list(CAT_chum_btf_comp = "q10"), line_col = lwrq_col, line_lab_day = 25, line_lab = "p10", line_lab_angle = 5)
-relationship_plot2("chum_comp", add = TRUE, settings = list(CAT_chum_btf_comp = "q90"), line_col = uprq_col, line_lab_day = 27, line_lab = "p90", line_lab_angle = 5)
+relationship_plot2("chum_comp", add = TRUE, settings = list(CAT_chum_sonar_comp = "q10"), line_col = lwrq_col, line_lab_day = 25, line_lab = "p10", line_lab_angle = 5)
+relationship_plot2("chum_comp", add = TRUE, settings = list(CAT_chum_sonar_comp = "q90"), line_col = uprq_col, line_lab_day = 27, line_lab = "p90", line_lab_angle = 5)
 
 # panel (e): % sockeye
 relationship_plot2("sockeye_comp", line_col = avg_col, line_lab_day = 36, line_lab = "p50", line_lab_angle = 5)
-relationship_plot2("sockeye_comp", add = TRUE, settings = list(CAT_sockeye_btf_comp = "q10"), line_col = lwrq_col, line_lab_day = 38, line_lab = "p10", line_lab_angle = 0)
-relationship_plot2("sockeye_comp", add = TRUE, settings = list(CAT_sockeye_btf_comp = "q90"), line_col = uprq_col, line_lab_day = 34, line_lab = "p90", line_lab_angle = 15)
+relationship_plot2("sockeye_comp", add = TRUE, settings = list(CAT_sockeye_sonar_comp = "q10"), line_col = lwrq_col, line_lab_day = 38, line_lab = "p10", line_lab_angle = 0)
+relationship_plot2("sockeye_comp", add = TRUE, settings = list(CAT_sockeye_sonar_comp = "q90"), line_col = uprq_col, line_lab_day = 34, line_lab = "p90", line_lab_angle = 15)
 
 # x-axis label
 mtext(side = 1, outer = TRUE, line = 0.35, "Date", cex = 0.8, col = plot_text_col)
