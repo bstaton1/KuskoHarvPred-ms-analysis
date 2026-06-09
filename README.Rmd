@@ -18,6 +18,8 @@ knitr::opts_chunk$set(echo = FALSE)
 [![ArticleDOI](https://img.shields.io/badge/Article-10.1093/najfmt/vqaf055-blue?logo=doi&logoColor=f5f5f5)](https://doi.org/10.1093/najfmt/vqaf055)  
 [![GitHub Repo Archive DOI](https://img.shields.io/badge/GitHub%20Repo%20Archive-10.5281/zenodo.13293677-blue?logo=github)](https://doi.org/10.5281/zenodo.13293677)
 
+> **NOTE:** This version of the repo creates figures/tables based on an updated analysis that uses the Kuskokwim River sonar counts in place of the Bethel Test Fishery, given the discontinuation of the Bethel Test Fishery following the 2024 season.
+
 ## Repository Structure
 
 ```{r subdir-table}
@@ -26,6 +28,7 @@ tab = matrix(c(
   "`session-setup.R`",          "Loads packages, sets directories, creates miscellaneous objects used throughout other scripts",
   "`make-figures.R`",           "Creates all figures in the main text",
   "`make-tables.R`",            "Creates `.csv` files containing the summarized information ready for table formatting and inclusion in main text and Supplement A",
+  "`make-tables-img.R`",         "Creates `.png` files that display formatted tables, similar to those displayed in the main text and Supplement A",
   "`make-residual-figures.R`",  "Creates all residual diagnostic figures in Supplement B"
 
 ), ncol = 2, byrow = TRUE)
@@ -71,6 +74,14 @@ To ensure installation of the exact package versions used upon publication, inst
 remotes::install_github("bstaton1/KuskoHarvUtils", ref = "v0.2.0")
 remotes::install_github("bstaton1/KuskoHarvEst", ref = "v1.3.0")
 remotes::install_github("bstaton1/KuskoHarvData", ref = "v2023.5")
+```
+
+**To use this version of the repository, however, you should install the latest versions of the packages, i.e., from their respective main branches**:
+
+```{r, eval = FALSE, echo = TRUE}
+remotes::install_github("bstaton1/KuskoHarvUtils")
+remotes::install_github("bstaton1/KuskoHarvEst")
+remotes::install_github("bstaton1/KuskoHarvData")
 ```
 
 ### CRAN Packages
