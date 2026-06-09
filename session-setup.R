@@ -30,10 +30,10 @@ proj_dir = this.path::this.proj()
 data_dir = file.path(proj_dir, "validation/data")
 
 # location of figure file output
-figure_dir = file.path(proj_dir, "figures")
+figure_dir = file.path(proj_dir, "figures-with-sonar")
 
 # location of table file output
-table_dir = file.path(proj_dir, "tables")
+table_dir = file.path(proj_dir, "tables-with-sonar")
 
 # create figure and table output directories if non-existent
 if (!dir.exists(figure_dir)) dir.create(figure_dir)
