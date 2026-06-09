@@ -7,10 +7,10 @@ source(file.path(this.path::this.proj(), "session-setup.R"))
 # cat("\nMaking Table: aic.csv\n")
 
 # variables in any models
-all_vars = c("day", "I(day^2)", "hours_open", "fished_yesterday", "weekend", "p_before_noon", "total_btf_cpue",
-             "chinook_btf_comp", "I(chinook_btf_comp^2)",
-             "chum_btf_comp", "I(chum_btf_comp^2)",
-             "sockeye_btf_comp", "I(sockeye_btf_comp^2)"
+all_vars = c("day", "I(day^2)", "hours_open", "weekend", "p_before_noon", "total_sonar_count",
+             "chinook_sonar_comp", "I(chinook_sonar_comp^2)",
+             "chum_sonar_comp", "I(chum_sonar_comp^2)",
+             "sockeye_sonar_comp", "I(sockeye_sonar_comp^2)"
 )
 
 # function to prepare AIC output into a table
@@ -383,7 +383,7 @@ write.csv(tab, file.path(table_dir, "data-and-predictions.csv"), row.names = FAL
 # cat("\nMaking Table: predictors.csv\n")
 
 # extract values of the predictor variables
-tab = fit_data[,c("year", "date", "day", "hours_open", "p_before_noon", "fished_yesterday", "weekend", "total_btf_cpue", "chinook_btf_comp", "chum_btf_comp", "sockeye_btf_comp")]
+tab = fit_data[,c("year", "date", "day", "hours_open", "p_before_noon", "weekend", "total_sonar_count", "chinook_sonar_comp", "chum_sonar_comp", "sockeye_sonar_comp")]
 
 # create a "nice" date
 months = lubridate::month(tab$date, label = TRUE, abbr = TRUE) |> as.character()
@@ -391,17 +391,16 @@ days = lubridate::day(tab$date)
 tab$date_nice = paste0(days, " ", months)
 
 # format the composition variables
-comps = c("chinook_btf_comp", "chum_btf_comp", "sockeye_btf_comp")
+comps = c("chinook_sonar_comp", "chum_sonar_comp", "sockeye_sonar_comp")
 tab[,comps] = apply(tab[,comps], 1, function(x) smart_round(x, 2) |> percentize(escape = TRUE)) |> t() |> as.data.frame()
 
 # format all other variables
-tab$fished_yesterday = ifelse(tab$fished_yesterday, "Yes", "No")
 tab$weekend = ifelse(tab$weekend, "Yes", "No")
 tab$p_before_noon = percentize(tab$p_before_noon, escape = TRUE)
-tab$total_btf_cpue = round(tab$total_btf_cpue, 1)
+tab$total_sonar_count = round(tab$total_sonar_count, 1)
 
 # re-order the variables
-tab = tab[,c("year", "date_nice", "day", "hours_open", "p_before_noon", "fished_yesterday", "weekend", "total_btf_cpue", "chinook_btf_comp", "chum_btf_comp", "sockeye_btf_comp")]
+tab = tab[,c("year", "date_nice", "day", "hours_open", "p_before_noon", "weekend", "total_sonar_count", "chinook_sonar_comp", "chum_sonar_comp", "sockeye_sonar_comp")]
 
 # save the output
 write.csv(tab, file.path(table_dir, "predictors.csv"), row.names = FALSE)
